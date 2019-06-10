@@ -1,0 +1,60 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if registro %}
+		<div class="message" id="message">Se agregó correctamente</div>
+	{% endif %}
+
+	<h1 class="orq-title">EVALUACIONES</h1>
+	<div class="orq-tabla-agregar">
+		<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> AGREGAR EVALUACIÓN</button>
+	</div>
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				<th>Alumno</th>
+				<th>Fecha de inicio</th>
+				<th>Estatus</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if evaluaciones %}
+				{% for evaluacion in evaluaciones %}
+					<tr>
+						<td style="display: flex;">
+							<img class="orq-tabla-img" src="{{ evaluacion.alumno.foto.url }}" alt="foto de perfil">
+							<p>{{ evaluacion.alumno.nombre }} {{evaluacion.alumno.apellido}}</p>
+						</td>
+						<td>{{ evaluacion.fecha_ini }}</td>
+						<td>
+							{% if evaluacion.status == 'E' %}
+								<span class="esperando">ESPERANDO</span>
+							{% elif evaluacion.status == 'V' %}
+								<span class="enviado">ENVIADO</span>
+							{% elif evaluacion.status == 'N' %}
+								<span class="evaluado">EVALUADO</span>
+							{% endif %}
+						</td>
+						<td style="display: flex; justify-content: center;">
+							<button class="orq-btn ver" onclick="redireccionar('{{ evaluacion.id }}');"><i class="fa fa-eye"></i></button>
+								<button class="orq-btn" style="background: #a00; margin-left: .8rem;" onclick="redireccionar('/evaluaciones/{{ evaluacion.id }}/eliminar');"><i class="fa fa-times"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay evaluaciones registradas</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script>
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'Base/base_login.html' %}
+
+{% load staticfiles %}
+
+{% block title %} OSRJG - Login {% endblock %}
+
+{% block content %}
+	<style type="text/css">
+		body {
+			overflow: hidden !important;
+		}
+
+		label {
+			display: none;
+		}
+
+		ul {
+			list-style: none;
+			padding-left: 0;
+		}
+
+		li {
+			font-size: 15px;
+			text-align: center;
+			color: #f00;
+		}
+
+		input {
+			font-family: 'Helvetica';
+		}
+
+		@keyframes load {
+			0% {
+				opacity: .1;
+				transform: translate(0,-30%);
+			}
+
+			100% {
+				opacity: 1;
+				transform: translateY(-50%,-50%);
+			}
+		}
+
+		@keyframes error {
+			0% {transform: translateX(10px); opacity: .1;}
+			10% {transform: translateX(-10px);}
+			20% {transform: translateX(10px);}
+			30% {transform: translateX(-10px);}
+			40% {transform: translateX(10px);}
+			50% {transform: translateX(-10px);}
+			60% {transform: translateX(10px);}
+			70% {transform: translateX(-10px);}
+			80% {transform: translateX(10px);}
+			90% {transform: translateX(-10px);}
+			100% {transform: translateX(0); opacity: 1;}
+		}
+
+		.orq-input span i {
+			transition: all .3s;
+		}
+
+		.orq-input input:focus ~ span i{
+			color: #080 !important;
+		}
+	</style>
+
+	<img class="orq-bg" src="{% static 'img/bg.jpg' %}">
+
+	<div class="orq-form-login">
+		<form method="POST" id="login">
+			<div class="orq-form-login-logo">
+				<img src="{% static 'img/logo.png' %}" alt="logo">
+			</div>
+			{% if messages %}
+				<ul>
+					{% for message in messages %}
+						<li>{{ message }}</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+
+			{% csrf_token %}
+			<div class="orq-input">
+				<input class="empty" type="number" id="id_username" name="username" placeholder="Usuario" onkeypress="len8(event,'id_username')" onpaste="event.preventDefault();" ondragover="event.preventDefault();">
+				<span><i class="fa fa-user"></i></span>
+			</div>
+			<div class="orq-input">
+				<input class="empty" type="password" id="id_password" name="password" placeholder="Contraseña">
+				<span><i class="fa fa-lock"></i></span>
+			</div>
+			<div class="orq-form-login-btn">
+				<button class="btn btn-success" type="submit">Acceder</button>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		a = document.getElementsByTagName('li');
+		if (a.length == 1) {
+			b = document.getElementById('login');
+			b.style.animation = "error 1.5s";
+		} else {
+			b = document.getElementById('login');
+			b.style.animation = "load 2.5s";
+		}
+	</script>
+
+{% endblock %}

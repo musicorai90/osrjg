@@ -1,0 +1,51 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if registro %}
+		<div class="message" id="message">Se modificó correctamente</div>
+	{% endif %}
+
+	<h1 class="orq-title">PERFIL DEL USUARIO</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-12 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ representante.nombre }} {{ representante.apellido }}</h2>
+				<p>representante</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Cedula:</p>
+				<p class="orq-perfil-content">{{ representante.cedula }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Teléfono:</p>
+				<p class="orq-perfil-content">{{ representante.telefono }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-4">
+				<p class="orq-perfil-title">Mail:</p>
+				<p class="orq-perfil-content">{{ representante.email }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Dirección:</p>
+				<p class="orq-perfil-content">{{ representante.direccion }}</p>
+			</div>
+		</div>
+		<div class="orq-perfil-btn">
+			<button class="orq-btn ver" onclick="redireccionar('modificar/');">Modificar</button>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}

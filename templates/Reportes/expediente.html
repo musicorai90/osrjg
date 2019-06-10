@@ -1,0 +1,128 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<link rel="icon" href="{% static 'img/icon.jpg' %}">
+	<link rel="stylesheet" href="{% static 'lib/fontawesome/css/all.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+	<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+	<title>{% block title %} OSRJG {% endblock %}</title>
+
+	<style>
+		@page {
+			size: letter landscape;
+			margin: 2.54cm;
+
+			@frame header_frame {
+				-pdf-frame-content: header_fecha_hora;
+				left: 50pt; width: 450pt; top: 50pt; height: 40pt;
+			}
+
+			@frame footer_frame {
+				-pdf-frame-content: header_pagina;
+				right: 50pt; width: 450pt; bottom: 25pt; height: 40pt;
+			}
+
+			@frame footer_frame {
+				-pdf-frame-content: footer;
+				left: 50pt; width: 695pt; bottom: 30pt; height: 40pt;
+			}
+		}
+
+		body {
+			font-size: 14px;
+		}
+
+		img {
+			width: 13cm;
+			text-align: center;
+		}
+
+		h1 {
+			text-align: center;
+			font-size: 16px;
+			margin-bottom: 1rem;
+		}
+
+		p.expediente-content {
+			margin-top: 0;
+			text-indent: 16px;
+		}
+
+		table {
+			border: 1px solid #555;
+		}
+
+		th {
+			background: #555;
+			color: #fff;
+		}
+
+		th, td {
+			text-align: left;
+			padding: 5px;
+		}
+
+		div.firma {
+			text-align: center;
+		}
+
+		div.firma p {
+			text-align: center;
+		}
+
+		p.firma-nombre {
+			margin-top: 2cm;
+			font-weight: 600;
+			margin-bottom: 0;
+			font-size: 16px;
+		}
+
+		span.firma-cargo {
+			/*margin-top: 0;*/
+			font-weight: 300;
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body class="expediente-body">
+	<div id="header_fecha_hora">{{ fecha }}</div>
+	<div id="header_pagina" style="text-align: right;"> <pdf:pagenumber>
+		/ <pdf:pagecount>
+	</div>
+	<div id="footer" style="text-align: center;">Carrera 4, al frente de la Plaza Simón Bolívar - Teléfono: 0412-1524395</div>
+	<img class="expediente-img" src="static/img/logo.png" alt="logo">
+	<h1 class="orq-title expediente-title">EXPEDIENTE</h1>
+	<p class="expediente-content">A través de la presenta se hace constar que {% if alumno.sexo == 'M' %} el alumno {% else %} la alumna {% endif %} <strong>{{ alumno.nombre }} {{ alumno.apellido }}</strong>, titular de la cédula de identidad <strong>{{ alumno.cedula }}</strong>, ingresó a la Orquesta Sinfónica Regional Juvenil de Guanare el día {{ alumno.fecha_ing }} y ha participado en las siguientes actividades:.</p>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th scope="col" style="width: 50px;">#</th>
+				<th scope="col">Descripción</th>
+				<th scope="col">Encargado</th>
+				<th scope="col">Lugar</th>
+				<th scope="col">Fecha</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for number,actividad in actividades %}
+				<tr>
+					<td scope="row">{{ number }}</td>
+					<td>{{ actividad.descripcion }}</td>
+					<td>{{ actividad.encargado }}</td>
+					<td>{{ actividad.lugar }}</td>
+					<td>{{ actividad.fecha }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="firma">
+		<p class="firma-nombre">Lic. Leibniz Sulbarán<br><span class="firma-cargo">Director de núcleo</span></p>
+	</div>
+
+	<script type="text/javascript" src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

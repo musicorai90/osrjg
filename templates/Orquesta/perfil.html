@@ -1,0 +1,93 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if registro %}
+		<div class="message" id="message">Se modificó correctamente</div>
+	{% endif %}
+
+	<h1 class="orq-title">MI PERFIL</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-4">
+				<img class="orq-perfil-img" src="{{ usuario.foto.url }}" alt="">
+			</div>
+			<div class="col-8 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+				<p>{{ tipo }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Cedula:</p>
+				<p class="orq-perfil-content">{{ usuario.cedula }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Teléfono:</p>
+				<p class="orq-perfil-content">{{ usuario.telefono }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-4">
+				<p class="orq-perfil-title">Mail:</p>
+				<p class="orq-perfil-content">{{ usuario.email }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Dirección:</p>
+				<p class="orq-perfil-content">{{ usuario.direccion }}</p>
+			</div>
+		</div>
+		{% if tipo == 'alumno' %}
+			<div class="row orq-perfil-col">
+				<div class="col-6">
+					<p class="orq-perfil-title">Instrumento:</p>
+					<p class="orq-perfil-content">{{ usuario.instrumento }}</p>
+				</div>
+				<div class="col-6">
+					<p class="orq-perfil-title">Representante:</p>
+					<p class="orq-perfil-content">{{ usuario.representante }}</p>
+				</div>
+			</div>
+			<div class="row orq-perfil-col">
+				<div class="col-6">
+					<p class="orq-perfil-title">Fecha de nacimiento:</p>
+					<p class="orq-perfil-content">{{ usuario.fecha_nac }}</p>
+				</div>
+				<div class="col-6">
+					<p class="orq-perfil-title">Fecha de ingreso:</p>
+					<p class="orq-perfil-content">{{ usuario.fecha_ing }}</p>
+				</div>
+			</div>
+			<div class="row orq-perfil-col">
+				<div class="col-4">
+					<p class="orq-perfil-title">Nota:</p>
+					<p class="orq-perfil-content">{{ usuario.nota_aud }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Nivel:</p>
+					<p class="orq-perfil-content">{{ usuario.nivel }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Sexo:</p>
+					<p class="orq-perfil-content">{{ usuario.sexo }}</p>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	<div class="button-content">
+		<button class="orq-btn ver" onclick="redireccionar('modificar/');">Modificar</button>
+		{% if tipo == 'admin' %}
+			<button class="orq-btn enviar" style="margin-left: .8rem;" onclick="redireccionar('cambiar/');">Cambiar admin</button>
+		{% endif %}
+	</div>
+
+	<script type="text/javascript">
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}

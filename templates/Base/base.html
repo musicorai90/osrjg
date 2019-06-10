@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" name="viewport">
+	<link rel="icon" href="{% static 'img/icon.jpg' %}">
+	<link rel="stylesheet" href="{% static 'lib/fontawesome/css/all.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+	<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+	<title>{% block title %} OSRJG {% endblock %}</title>
+</head>
+<body>
+	<div class="preloader" id="container">
+		<div class="circle"></div>
+	</div>
+	{% block header %}
+		<nav class="orq-nav">
+			<span onclick="menuAction();"><i class="fa fa-bars"></i></span>
+			<div class="orq-logo">
+				<img src="{% static 'img/logo.png' %}" alt="">
+			</div>
+			<div>
+				<a href="{% url 'perfil' %}" id="user"><i class="fa fa-user"></i></a>
+				<a href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"></i></a>
+			</div>
+		</nav>
+	{% endblock %}
+
+	<div class="contenedor">
+		<div class="pl-0 pr-0 orq-bar" id="orq-bar">
+			<div class="orq-profile-img" id="ancho-img">
+				<img src="{{ usuario.foto.url }}" alt="foto de perfil" id="orq-profile-img">
+				<div class="orq-profile-img-cambiar" onclick="redireccionar('/cambiarImagen');">
+					<span><i class="fa fa-image"></i> Cambiar</span>
+				</div>
+			</div>
+			<h4>{{ usuario.apellido }}, {{ usuario.nombre }}</h4>
+			<h4 style="font-size: 16px;">{{ tipo.capitalize }}</h4>
+			<ul>
+				<li onclick="redireccionar('/index/');"><i class="fa fa-home"></i>Home</li>
+				{% if tipo == 'admin' %}
+					<li onclick="redireccionar('/admins/');"><i class="fa fa-user"></i>Admin</li>
+					<li onclick="redireccionar('/alumnos/');"><i class="fa fa-user"></i>Alumno</li>
+					<li onclick="redireccionar('/representantes/');"><i class="fa fa-user"></i>Representante</li>
+					<li onclick="redireccionar('/profesores/');"><i class="fa fa-user-tie"></i>Profesor</li>
+					<li onclick="redireccionar('/instrumentos/');"><i class="fa fa-music"></i>Instrumento</li>
+					<li onclick="redireccionar('/actividades/');"><i class="fa fa-calendar-alt"></i>Actividades</li>
+					<li onclick="redireccionar('/solicitudes/');"><i class="fa fa-file-export"></i>Emitir</li>					<!--<li class="desplegar" onclick="expandir('registrar');" id="registrar_i"><i class="fa fa-user-plus"></i>Registrar</li>
+					<li class="sub-menu" id="registrar">
+						<ul>
+							<li onclick="redireccionar('nuevoAlumno/');"><i class="fa fa-user"></i>Alumno</li>
+							<li onclick="redireccionar('nuevoRepresentante/');"><i class="fa fa-user"></i>Representante</li>
+							<li><i class="fa fa-user-tie"></i>Profesor</li>
+							<li><i class="fa fa-calendar-alt"></i>Actividades</li>
+							<li><i class="fa fa-music"></i>Instrumento</li>
+						</ul>
+					</li>
+					<li class="desplegar" onclick="expandir('consultar');" id="consultar_i"><i class="fa fa-book-open"></i>Consultar</li>
+					<li class="sub-menu" id="consultar">
+						<ul>
+							<li><i class="fa fa-user"></i>Alumno</li>
+							<li><i class="fa fa-user"></i>Representante</li>
+							<li><i class="fa fa-user-tie"></i>Profesor</li>
+							<li><i class="fa fa-calendar-alt"></i>Actividades</li>
+							<li><i class="fa fa-music"></i>Instrumento</li>
+						</ul>
+					</li>-->
+				{% elif tipo == 'profesor' %}
+					<li onclick="redireccionar('/evaluaciones/');"><i class="fa fa-calendar-alt"></i>Evaluación</li>
+					<li onclick="redireccionar('/alumnos/');"><i class="fa fa-layer-group"></i>Matricula</li>
+					<!--<li><i class="fa fa-book-open"></i>Consulta</li>-->
+				{% else %}
+					<li onclick="redireccionar('/evaluaciones/');"><i class="fa fa-calendar-alt"></i>Evaluaciones</li>
+					<li onclick="redireccionar('/notas/')"><i class="fa fa-edit"></i>Notas</li>
+					<li onclick="redireccionar('/solicitudes/');"><i class="fa fa-edit"></i>Solicitud</li>
+				{% endif %}
+				<li onclick="redireccionar('/contrasena/');"><i class="fa fa-key"></i>Contraseña</li>
+			</ul>
+		</div>
+		<div class="orq-general" id="orq-general">
+			{% block content %}
+			
+			{% endblock %}
+		</div>
+	</div>
+
+	{% block footer %}
+
+	{% endblock %}
+
+	<script type="text/javascript" src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

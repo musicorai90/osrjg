@@ -1,0 +1,50 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if registro %}
+		<div class="message" id="message">Se agregó correctamente</div>
+	{% endif %}
+
+	<h1 class="orq-title">ACTIVIDADES</h1>
+	<div class="orq-tabla-agregar">
+		<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> AGREGAR ACTIVIDAD</button>
+	</div>
+	<table class="table orq-tabla actividades">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Descripción</th>
+				<th>Lugar</th>
+				<th>Fecha</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if actividades %}
+				{% for actividad in actividades %}
+					<tr>
+						<td>{{ actividad.id }}</td>
+						<td>{{ actividad.descripcion }}</td>
+						<td>{{ actividad.lugar }}</td>
+						<td>{{ actividad.fecha }}</td>
+						<td>
+							<button class="orq-btn ver" onclick="redireccionar('{{ actividad.id }}');"><i class="fa fa-eye"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay actividades registrados</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script>
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+{% endblock %}

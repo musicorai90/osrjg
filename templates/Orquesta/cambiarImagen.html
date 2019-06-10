@@ -1,0 +1,33 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	<style>
+		.orq-form {
+			display: -webkit-flex;
+			display: -moz-flex;
+			display: -ms-flex;
+			display: -o-flex;
+			display: flex;
+			justify-content: center;
+			-ms-align-items: center;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+	</style>
+
+	<h1 class="orq-title">CAMBIAR IMAGEN</h1>
+	<form method="post" enctype="multipart/form-data" class="orq-form" id="orq-form">
+		{% csrf_token %}
+		<input type="file" accept="image/*" onchange="openFile(event);" name="image" id="input-img" style="display: none;" required>
+		<button type="button" onclick="document.getElementById('input-img').click()" class="orq-btn orq-btn-cambiarImagen">Seleccionar imagen</button>
+		<div style="display: none;" class="orq-img-nueva">
+			<img src="" id="orq-img-nueva" alt="nueva imagen">
+		</div>
+		<div style="display: none;" class="orq-img-nueva-button">
+			<button class="orq-btn orq-btn-cambiarImagen" type="submit">Guardar</button>
+		</div>
+	</form>
+
+{% endblock %}

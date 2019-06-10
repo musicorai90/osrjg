@@ -1,0 +1,131 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">SOLICITUDES</h1>
+	<div class="orq-buscador">
+		<input type="text" class="form-control" onkeyup="buscar()" id="buscador" placeholder="Buscar por id, cédula, nombre o apellido">
+		<span><i class="fa fa-search"></i></span>
+	</div>
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Nombre</th>
+				<th>Fecha</th>
+				<th>Estatus</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody id="orq-tbody">
+			{% if solicitudes %}
+				{% for solicitud in solicitudes %}
+					<tr>
+						<td>{{ solicitud.id }}</td>
+						<td style="display: flex;">
+							<img class="orq-tabla-img" src="{{ solicitud.alumno.foto.url }}" alt="foto de perfil">
+							<p>{{ solicitud.alumno.nombre }} {{solicitud.alumno.apellido}}</p>
+						</td>
+						<td>{{ solicitud.fecha_sol }}</td>
+						{% if solicitud.status == 'E' %}
+							<td><span class="esperando">ESPERANDO</span></td>
+							<td>
+								<button class="orq-btn ver" onclick="redireccionar('/solicitudes/{{ solicitud.codigo }}');"><i class="fa fa-paper-plane"></i></button>
+							</td>
+						{% else %}
+							<td colspan="2"><span class="enviado">ENVIADO</span></td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="4">No hay solicitudes registradas</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script>
+		function buscar() {
+			var suId = document.getElementById('buscador').value;
+
+			if (suId) {
+				var xhr = new XMLHttpRequest();
+
+				xhr.open("GET","/busqueda/"+suId+"/");
+				xhr.send();
+
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						var solicitudes = JSON.parse(xhr.responseText);
+						if (solicitudes.length == 0) {
+							document.getElementById('orq-tbody').innerHTML = `
+								<tr>
+									<td style="text-align: center;" colspan="5">No hay solicitudes registradas</td>
+								</tr>
+							`;
+						} else {
+							document.getElementById('orq-tbody').innerHTML = "";
+						}
+						
+						for (var i = solicitudes.length - 1; i >= 0; i--) {
+							var newTr = document.createElement('TR');
+							
+							var strHTML = `
+								<td>${solicitudes[i].id}</td>
+								<td style="display: flex;">
+									<img class="orq-tabla-img" src="${solicitudes[i].foto}" alt="foto"/>
+									<p>${solicitudes[i].alumno}</p>
+								</td>
+								<td>${solicitudes[i].fecha_sol}</td>
+							`;
+
+							if (solicitudes[i].status == 'E') {
+								strHTML += `
+									<td><span class="esperando">ESPERANDO</span></td>
+									<td>
+										<button class="orq-btn ver" onclick="redireccionar('/solicitudes/${solicitudes[i].codigo}');"><i class="fa fa-paper-plane"></i></button>
+									</td>
+								`
+							} else {
+								strHTML += `<td colspan="2"><span class="enviado">ENVIADO</span></td>`
+							}
+
+							document.getElementById('orq-tbody').appendChild(newTr);
+							newTr.innerHTML = strHTML;
+						}
+					}
+				}
+			} else {
+				document.getElementById('orq-tbody').innerHTML = `
+					{% if solicitudes %}
+						{% for solicitud in solicitudes %}
+							<tr>
+								<td>{{ solicitud.id }}</td>
+								<td style="display: flex;">
+									<img class="orq-tabla-img" src="{{ solicitud.alumno.foto.url }}" alt="foto de perfil">
+									<p>{{ solicitud.alumno.nombre }} {{solicitud.alumno.apellido}}</p>
+								</td>
+								<td>{{ solicitud.fecha_sol }}</td>
+								{% if solicitud.status == 'E' %}
+									<td><span class="esperando">ESPERANDO</span></td>
+									<td>
+										<button class="orq-btn ver" onclick="redireccionar('/solicitudes/{{ solicitud.codigo }}');"><i class="fa fa-paper-plane"></i></button>
+									</td>
+								{% else %}
+									<td colspan="2"><span class="enviado">ENVIADO</span></td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td style="text-align: center;" colspan="4">No hay solicitudes registradas</td>
+						</tr>
+					{% endif %}
+				`;
+			}
+		}
+	</script>
+{% endblock %}

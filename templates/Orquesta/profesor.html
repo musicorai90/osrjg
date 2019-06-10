@@ -1,0 +1,55 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">PERFIL DEL USUARIO</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-4">
+				<img class="orq-perfil-img" src="{{ profesor.foto.url }}" alt="">
+			</div>
+			<div class="col-8 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ profesor.nombre }} {{ profesor.apellido }}</h2>
+				<p>profesor</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Cedula:</p>
+				<p class="orq-perfil-content">{{ profesor.cedula }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Teléfono:</p>
+				<p class="orq-perfil-content">{{ profesor.telefono }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-4">
+				<p class="orq-perfil-title">Mail:</p>
+				<p class="orq-perfil-content">{{ profesor.email }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Dirección:</p>
+				<p class="orq-perfil-content">{{ profesor.direccion }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Instrumento:</p>
+				<p class="orq-perfil-content">{{ profesor.instrumento }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Sexo:</p>
+				<p class="orq-perfil-content">{{ profesor.sexo }}</p>
+			</div>
+		</div>
+	</div>
+	<div class="orq-perfil-btn">
+		<button class="orq-btn" style="background: #a00;" onclick="redireccionar('retirar/');">Retirar</button>
+	</div>
+
+{% endblock %}

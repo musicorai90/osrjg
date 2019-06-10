@@ -1,0 +1,45 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">DETALLES DE LA ACTIVIDAD</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-12 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ actividad.descripcion }}</h2>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Encargado:</p>
+				<p class="orq-perfil-content">{{ actividad.encargado }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Lugar:</p>
+				<p class="orq-perfil-content">{{ actividad.lugar }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Fecha:</p>
+				<p class="orq-perfil-content">{{ actividad.fecha }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Participantes:</p>
+				<p class="orq-perfil-content" style="display: flex; flex-wrap: wrap;">
+					{% for participante in actividad.participantes.all %}
+						<span style="padding: .5rem; background: #333; border-radius: 5px; overflow: hidden; margin: .5rem .5rem .5rem 0px;">{{ participante }}</span>
+					{% endfor %}
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="button-content">
+		<button class="orq-btn ver" onclick="redireccionar('modificar/');">Modificar</button>
+	</div>
+
+{% endblock %}

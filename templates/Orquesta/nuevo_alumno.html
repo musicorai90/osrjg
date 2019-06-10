@@ -1,0 +1,143 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if cedExist %}
+		<div class="message" id="message" style="z-index: 1000; background: rgba(200,0,0,.9); top: 3rem;">La cédula ingresada ya existe</div>
+	{% endif %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">REGISTRAR ALUMNO</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Cédula:</label>
+				{{ form.cedula }}
+			</div>
+			<div class="orq-col">
+				<label>Nombre:</label>
+				{{ form.nombre }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Apellido:</label>
+				{{ form.apellido }}
+			</div>
+			<div class="orq-col">
+				<label>Teléfono:</label>
+				{{ form.telefono }}
+			</div>
+		</div>
+		<div class="orq-row-2">
+			<label>Dirección:</label>
+			{{ form.direccion }}
+		</div>
+		<div class="orq-row-2">
+			<label>Correo:</label>
+			{{ form.email }}
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Instrumento:</label>
+				{{ form.instrumento }}
+			</div>
+			<div class="orq-col">
+				<label>Representante:</label>
+				<div class="orq-col-opt">
+					{{ form.representante }}
+					<button type="button" class="addRepresentante" id="addRepresentante" onclick="modalRepresentante();"><i class='fa fa-plus'></i></button>
+				</div>
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Fecha de nacimiento:</label>
+				{{ form.fecha_nac }}
+			</div>
+			<div class="orq-col">
+				<label>Fecha de ingreso:</label>
+				{{ form.fecha_ing }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Nivel:</label>
+				{{ form.nivel }}
+			</div>
+			<div class="orq-col">
+				<label>Sexo:</label>
+				{{ form.sexo }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Nota de audición:</label>
+				{{ form.nota_aud }}
+			</div>
+			<div class="orq-col">
+				<label>Instrumento asignado:</label>
+				{{ form.cod_ins }}
+			</div>
+		</div>
+		<div class="modal-representante" id="modal-representante">
+			<div class="modal-representante-content" id="modal-representante-content">
+				<h2 class="orq-title">REGISTRAR REPRESENTANTE</h2>
+				<span class="modal-cerrar" onclick="cerrarModal()">&times;</span>
+				<div class="orq-form-row flex">
+					<div class="orq-form-col">
+						<label>Cédula:</label>
+						<input class="form-control" id="cedula_rep" maxlength="8" name="cedula_rep" type="number" required placeholder="Cédula" min="1000000" max="99999999" autocomplete="off" onkeypress="len8(event,'cedula_rep');" onpaste="event.preventDefault();" ondragover="event.preventDefault()">
+					</div>
+					<div class="orq-form-col">
+						<label>Nombre:</label>
+						<input class="form-control" id="nombre_rep" maxlength="50" name="nombre_rep" type="text" placeholder="Nombre" onkeypress="onlyLetters(event);" onpaste="event.preventDefault();" ondragover="event.preventDefault()">
+					</div>
+				</div>
+				<div class="orq-form-row flex">
+					<div class="orq-form-col">
+						<label>Apellido:</label>
+						<input class="form-control" id="apellido_rep" maxlength="50" name="apellido_rep" type="text" placeholder="Apellido" onkeypress="onlyLetters(event);" onpaste="event.preventDefault();" ondragover="event.preventDefault()">
+					</div>
+					<div class="orq-form-col">
+						<label>Teléfono:</label>
+						<input class="form-control" id="telefono_rep" maxlength="11" name="telefono_rep" type="number" placeholder="Teléfono" onkeypress="telefonoEvent(event,'telefono_rep');" onpaste="event.preventDefault();" ondragover="event.preventDefault()">
+					</div>
+				</div>
+				<div class="orq-form-row">
+					<label>Dirección</label>
+					<textarea class="form-control" id="direccion_rep" name="direccion_rep" placeholder="Dirección"></textarea>
+				</div>
+				<div class="orq-form-row">
+					<label>Email:</label>
+					<input class="form-control" id="email_rep" maxlength="50" name="email_rep" type="text" placeholder="Email" ondragover="event.preventDefault()" onpaste="event.preventDefault();" onkeypress="correoNS(event);">
+				</div>
+				<div class="button-content">
+					<button type="button" class="orq-btn" style="margin-bottom: 1rem;" id="guardar-representante" onclick="alumnoRep();">Guardar</button>
+				</div>
+			</div>
+		</div>
+		<div class="button-content">
+			<button type="button" class="orq-btn" onclick="validarAlumno();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script>		
+		document.getElementById('id_instrumento').firstElementChild.textContent = "Seleccione un instrumento";
+		document.getElementById('id_representante').firstElementChild.textContent = "Seleccione un representante";
+		document.getElementById('id_nivel').firstElementChild.textContent = "Seleccione un nivel";
+		document.getElementById('id_sexo').firstElementChild.textContent = "Seleccione un sexo";
+
+		inputsReEnter();
+		enterAluRep();
+		document.getElementById('addRepresentante').addEventListener('click',function() {
+			document.getElementById('cedula_rep').focus();
+		});
+
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}

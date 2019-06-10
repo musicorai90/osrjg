@@ -1,0 +1,169 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">REGISTRAR ACTIVIDAD</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-row-2">
+			<label>Descripción:</label>
+			{{ form.descripcion }}
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Fecha:</label>
+				{{ form.fecha }}
+			</div>
+			<div class="orq-col">
+				<label>Lugar:</label>
+				{{ form.lugar }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Participantes:</label>
+				{{ form.participantes }}
+			</div>
+			<div class="orq-col orq-filters" id="filters">
+				<span id="selectAll" onclick="selectAll(this);">Seleccionar todos</span>
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Encargados:</label>
+				<ul id="id_encargados">
+					{% for encargado in encargados %}
+					<li>
+						<label for="encargados_{{ encargado.id }}">
+							<input type="checkbox" id="encargados_{{ encargado.id }}" value="{{ encargado.nombre }} {{ encargado.apellido }}">
+							{{ encargado.nombre }} {{ encargado.apellido }}
+							<span onclick="this.parentElement.click()" class="orq-form-check"></span>
+						</label>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="orq-col">
+				<label>Otros encargados:</label>
+				<input type="text" class="form-control" id="otros_encargados" placeholder="Otros encargados">
+			</div>
+		</div>
+		{{ form.encargado }}
+		<div class="button-content">
+			<button type="submit" style="display: none;" id="guardar-btn">Guardar</button>
+			<button type="button" class="orq-btn" onclick="validarAct();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script>
+		inputsReEnter();
+
+		var participantes = document.getElementById('id_participantes').getElementsByTagName('label');
+
+		{% for alumno in alumnosInactivos %}
+			for (var i = 0; i < participantes.length; i++) {
+				if (participantes[i].firstElementChild.value == '{{ alumno.id }}') {
+					var hijo = participantes[i].parentElement;
+					var padre = hijo.parentElement;
+					var elem = padre.removeChild(hijo);
+				}
+			}
+		{% endfor %}
+
+		for (var i = 0; i < participantes.length; i++) {
+			var spanCheck = document.createElement('SPAN');
+			participantes[i].appendChild(spanCheck);
+			spanCheck.classList.add('orq-form-check');
+			participante = participantes[i];
+			spanCheck.addEventListener('click',function() {
+				participante.click();
+			});
+		}
+
+		function selectAll(elem) {
+			var participantesNewAct = document.getElementById('id_participantes').getElementsByTagName('label');
+			if (elem.classList.contains('active')) {
+				for (var i = 0; i < elem.parentElement.children.length; i++) {
+					if (elem.parentElement.children[i].classList.contains('active')) {
+						elem.parentElement.children[i].classList.remove('active');
+					}
+				}
+				
+				for (var i = 0; i < participantesNewAct.length; i++) {
+					if (participantesNewAct[i].firstElementChild.checked) {
+						participantesNewAct[i].click();
+					}
+				}
+			} else {
+				for (var i = 0; i < elem.parentElement.children.length; i++) {
+					if (!elem.parentElement.children[i].classList.contains('active')) {
+						elem.parentElement.children[i].classList.add('active');
+					}
+				}
+
+				for (var i = 0; i < participantesNewAct.length; i++) {
+					if (!participantesNewAct[i].firstElementChild.checked) {
+						participantesNewAct[i].click();
+					}
+				}
+			}
+		}
+
+		var instrumentos = [];
+		{% for instrumento in instrumentos %}
+			var alumnoss = [];
+			{% for alumno in alumnos %}
+				if ('{{ alumno.instrumento.id }}' == '{{ instrumento.id }}') {
+					alumnoss.push('{{ alumno.id }}');
+				}
+			{% endfor %}
+			instrumentos.push(['{{ instrumento.id }}','{{ instrumento.nombre }}',alumnoss]);
+		{% endfor %}
+
+		for (var i = 0; i < instrumentos.length; i++) {
+			var newSpan = document.createElement('SPAN');
+			document.getElementById('filters').appendChild(newSpan);
+			newSpan.textContent = instrumentos[i][1];
+			newSpan.id = 'filter_' + i;
+		}
+
+		var filters = document.getElementById('filters').getElementsByTagName('span');
+		for (let filter of filters) {
+			if (filter.id != 'selectAll') {
+				filter.addEventListener('click',function() {
+					var pos = filter.id[filter.id.length - 1];
+					if (filter.classList.contains('active')) {
+						filter.classList.remove('active');
+
+						for (var j = 0; j < instrumentos[pos][2].length; j++) {
+							var participantesNewAct = document.getElementById('id_participantes').getElementsByTagName('label');
+							for (var k = 0; k < participantesNewAct.length; k++) {
+								if (instrumentos[pos][2][j] == participantesNewAct[k].firstElementChild.value) {
+									if (participantesNewAct[k].firstElementChild.checked) {
+										participantesNewAct[k].click();	
+									}
+								}
+							}
+						}
+					} else {
+						filter.classList.add('active');
+
+						for (var j = 0; j < instrumentos[pos][2].length; j++) {
+							var participantesNewAct = document.getElementById('id_participantes').getElementsByTagName('label');
+							for (var k = 0; k < participantesNewAct.length; k++) {
+								if (instrumentos[pos][2][j] == participantesNewAct[k].firstElementChild.value) {
+									if (!participantesNewAct[k].firstElementChild.checked) {
+										participantesNewAct[k].click();	
+									}
+								}
+							}
+						}
+					}
+				});
+			}
+		}
+	</script>
+
+{% endblock %}

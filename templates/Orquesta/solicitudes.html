@@ -1,0 +1,74 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if tipo == 'admin' or solExist %}
+		<h1 class="orq-title" style="padding-bottom: 1.5rem;">SOLICITUDES</h1>
+	{% else %}
+		<h1 class="orq-title">EXPEDIENTE</h1>
+		<div class="orq-tabla-agregar">
+			<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> SOLICITAR</button>
+		</div>
+	{% endif %}
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				{% if tipo == 'admin' %}
+					<th>Alumno</th>
+				{% else %}
+					<th>#</th>
+				{% endif %}
+				<th>Fecha de sol.</th>
+				<th>Fecha de ent.</th>
+				<th>Estatus</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if solicitudes %}
+				{% for solicitud in solicitudes %}
+					<tr>
+						{% if tipo == 'admin' %}
+							<td style="display: flex;">
+								<img class="orq-tabla-img" src="{{ solicitud.alumno.foto.url }}" alt="foto de perfil">
+								<p>{{ solicitud.alumno.nombre }} {{solicitud.alumno.apellido}}</p>
+							</td>
+						{% else %}
+							<td>{{ solicitud.id }}</td>
+						{% endif %}
+						<td>{{ solicitud.fecha_sol }}</td>
+						<td>{{ solicitud.fecha_ent }}</td>
+						{% if solicitud.status == 'E' %}
+							<td><span class="esperando">ESPERANDO</span></td>
+							<td>
+								{% if tipo == 'admin' %}
+									<button class="orq-btn ver" onclick="redireccionar('/solicitudes/{{ solicitud.codigo }}');"><i class="fa fa-paper-plane"></i></button>
+								{% else %}
+									<button class="orq-btn" style="background: #a00; margin-left: .8rem;" onclick="redireccionar('/solicitudes/{{ solicitud.id }}/eliminar');"><i class="fa fa-times"></i></button>
+								{% endif %}
+							</td>
+						{% elif solicitud.status == 'A' and tipo == 'alumno' %}
+							<td><span class="enviado">RECIBIDO</span></td>
+							<td>
+								<button class="orq-btn ver" onclick="window.open('/solicitudes/{{ solicitud.codigo }}', '_blank');"><i class="fa fa-download"></i></button>
+							</td>
+						{% else %}
+							<td colspan="2"><span class="enviado">ENVIADO</span></td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay solicitudes registradas</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script>
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">INSTRUMENTO - ALUMNOS</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-12 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ instrumento.nombre }}</h2>
+				<p>{{ instrumento.profesor.nombre }} {{ instrumento.profesor.apellido }}</p>
+			</div>
+		</div>
+		{% for alumno in alumnos %}
+			<div class="row orq-perfil-col">
+				<div class="col-4">
+					<p class="orq-perfil-title">Nombre:</p>
+					<p class="orq-perfil-content">{{ alumno.nombre }} {{ alumno.apellido }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Cédula:</p>
+					<p class="orq-perfil-content">{{ alumno.cedula }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Teléfono:</p>
+					<p class="orq-perfil-content">{{ alumno.telefono }}</p>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

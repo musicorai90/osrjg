@@ -1,0 +1,50 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">EVALUACIONES</h1>
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				<th>Contenido</th>
+				<th>Fecha de inicio</th>
+				<th>Estatus</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if evaluaciones %}
+				{% for evaluacion in evaluaciones %}
+					<tr>
+						<td id="contenido">{{ evaluacion.contenido }}</td>
+						<td>{{ evaluacion.fecha_ini }}</td>
+						<td>
+							{% if evaluacion.status == 'E' %}
+								<span class="esperando">ESPERANDO</span>
+							{% elif evaluacion.status == 'V' %}
+								<span class="enviado">ENVIADO</span>
+							{% elif evaluacion.status == 'N' %}
+								<span class="evaluado">EVALUADO</span>
+							{% endif %}
+						</td>
+						<td>
+							<button class="orq-btn ver" onclick="redireccionar('/evaluaciones/{{ evaluacion.id }}/');"><i class="fa fa-eye"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay evaluaciones registradas</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script type="text/javascript">
+		var texto = document.getElementById('contenido').textContent.substr(0,50);
+		document.getElementById('contenido').textContent = texto + "...";
+	</script>
+
+{% endblock %}

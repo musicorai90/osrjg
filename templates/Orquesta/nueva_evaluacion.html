@@ -1,0 +1,98 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if cedExist %}
+		<div class="message" id="message" style="z-index: 1000; background: rgba(200,0,0,.9); top: 3rem;">Este alumno ya tiene una evaluación</div>
+	{% endif %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">REGISTRAR EVALUACIÓN</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Alumno:</label>
+				{{ form.alumno }}
+			</div>
+		</div>
+		<div class="orq-row fw" id="items">
+			<label style="width: 100%; padding-left: .5rem;">Contenido:</label>
+			<span onclick="addItem();" class="addItem"><i class="fa fa-plus"></i></span>
+			<div class="orq-col">
+				<input type="text" class="form-control" placeholder="Item 1">
+			</div>
+			<div class="orq-col">
+				<input type="text" class="form-control" placeholder="Item 2">
+			</div>
+			<div class="orq-col">
+				<input type="text" class="form-control" placeholder="Item 3">
+			</div>
+			<div class="orq-col">
+				<input type="text" class="form-control" placeholder="Item 4">
+			</div>
+		</div>
+		<div class="orq-row-2">
+			<label>Observaciones:</label>
+			{{ form.observaciones }}
+		</div>
+		<div class="disabled">
+			{{ form.contenido }}
+		</div>
+		<div class="button-content">
+			<button type="submit" style="display: none;" id="guardar-btn">Guardar</button>
+			<button type="button" class="orq-btn" onclick="validarEva();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script>
+		inputsReEnter();
+		document.getElementById('id_alumno').firstElementChild.textContent = "Seleccione un alumno";
+
+		var aluVal = [];
+
+		{% for alumno in alumnos %}
+			{% if not alumno.fecha_egr and alumno.cedula != usuario.cedula %}
+				aluVal.push({{ alumno.id }})
+			{% endif %}
+		{% endfor %}
+
+		var alumnos = document.getElementById('id_alumno');
+
+		for (var i = 0; i < alumnos.options.length; i++) {
+			alumnos.options[i].disabled = true;
+			alumnos.options[i].style.display = "none";
+		}
+
+		for (var i = 0; i < alumnos.options.length; i++) {
+			for (var j = 0; j < aluVal.length; j++) {
+				if (aluVal[j] == alumnos.options[i].value) {
+					alumnos.options[i].disabled = false;
+					alumnos.options[i].style.display = "block";
+				}
+			}
+		}
+
+		function validarEva() {
+			var inputsEva = document.getElementById('items').getElementsByTagName('input');
+			for (var i = 0; i < inputsEva.length; i++) {
+				console.log(inputsEva[i].value);
+				if (inputsEva[i].value) {
+					document.getElementById('id_contenido').value += inputsEva[i].value + ";";
+				}
+			}
+
+			if (!document.getElementById('id_contenido').value) {
+				alert('Es necesario ingresar al menos un item')
+			} else {
+					document.getElementById('guardar-btn').click();
+				document.getElementById('id_contenido').value = "";
+			}
+		}
+
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}

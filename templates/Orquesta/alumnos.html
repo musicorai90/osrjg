@@ -1,0 +1,186 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if registro %}
+		<div class="message" id="message">Se agregó correctamente</div>
+	{% endif %}
+
+	{% if tipo == 'admin' %}
+		<h1 class="orq-title">ALUMNOS</h1>
+		<div class="orq-tabla-agregar orq-tabla-alumnos">
+			<button class="orq-btn enviar" onclick="mostrarInactivos();">VER INACTIVOS</button>
+			<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> AGREGAR ALUMNO</button>
+		</div>
+	{% elif tipo == 'profesor' %}
+		<h1 class="orq-title" style="margin-bottom: 1.5rem;">ALUMNOS</h1>
+	{% endif %}
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Cédula</th>
+				{% if tipo == 'admin' %}
+					<th>Instrumento</th>
+				{% else %}
+					<th>Nivel</th>
+				{% endif %}
+				<th>Representante</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if alumnosActivos %}
+				{% for alumno in alumnosActivos %}
+					<tr>
+						<td style="display: flex;">
+							<img class="orq-tabla-img" src="{{ alumno.foto.url }}" alt="foto de perfil">
+							<p>{{ alumno.nombre }} {{alumno.apellido}}</p>
+						</td>
+						<td>{{ alumno.cedula }}</td>
+						{% if tipo == 'admin' %}
+							<td>{{ alumno.instrumento }}</td>
+						{% else %}
+							<td>{{ alumno.nivel }}</td>
+						{% endif %}
+						<td>{{ alumno.representante }}</td>
+						<td>
+							<button class="orq-btn ver" onclick="redireccionar('{{ alumno.cedula }}');"><i class="fa fa-eye"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay alumnos registrados</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	<script>
+		function mostrarInactivos() {
+			document.getElementById('orq-general').innerHTML = `
+				{% if registro %}
+					<div class="message" id="message">Se agregó correctamente</div>
+				{% endif %}
+
+				{% if tipo == 'admin' %}
+					<h1 class="orq-title">ALUMNOS</h1>
+					<div class="orq-tabla-agregar orq-tabla-alumnos">
+						<button class="orq-btn enviar" onclick="mostrarActivos();">VER ACTIVOS</button>
+						<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> AGREGAR ALUMNO</button>
+					</div>
+				{% elif tipo == 'profesor' %}
+					<h1 class="orq-title" style="margin-bottom: 1.5rem;">ALUMNOS</h1>
+				{% endif %}
+				<table class="table orq-tabla">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Cédula</th>
+							{% if tipo == 'admin' %}
+								<th>Instrumento</th>
+							{% else %}
+								<th>Nivel</th>
+							{% endif %}
+							<th>Representante</th>
+							<th style="width: 120px;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if alumnosInactivos %}
+							{% for alumno in alumnosInactivos %}
+								<tr>
+									<td style="display: flex;">
+										<img class="orq-tabla-img" src="{{ alumno.foto.url }}" alt="foto de perfil">
+										<p>{{ alumno.nombre }} {{alumno.apellido}}</p>
+									</td>
+									<td>{{ alumno.cedula }}</td>
+									{% if tipo == 'admin' %}
+										<td>{{ alumno.instrumento }}</td>
+									{% else %}
+										<td>{{ alumno.nivel }}</td>
+									{% endif %}
+									<td>{{ alumno.representante }}</td>
+									<td>
+										<button class="orq-btn ver" onclick="redireccionar('{{ alumno.cedula }}');"><i class="fa fa-eye"></i></button>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td style="text-align: center;" colspan="5">No hay alumnos inactivos</td>
+							</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			`;
+		}
+
+		function mostrarActivos() {
+			document.getElementById('orq-general').innerHTML = `
+				{% if registro %}
+					<div class="message" id="message">Se agregó correctamente</div>
+				{% endif %}
+
+				{% if tipo == 'admin' %}
+					<h1 class="orq-title">ALUMNOS</h1>
+					<div class="orq-tabla-agregar orq-tabla-alumnos">
+						<button class="orq-btn enviar" onclick="mostrarInactivos();">VER INACTIVOS</button>
+						<button class="orq-btn agregar" onclick="redireccionar('agregar');"><i class="fa fa-plus"></i> AGREGAR ALUMNO</button>
+					</div>
+				{% elif tipo == 'profesor' %}
+					<h1 class="orq-title" style="margin-bottom: 1.5rem;">ALUMNOS</h1>
+				{% endif %}
+				<table class="table orq-tabla">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Cédula</th>
+							{% if tipo == 'admin' %}
+								<th>Instrumento</th>
+							{% else %}
+								<th>Nivel</th>
+							{% endif %}
+							<th>Representante</th>
+							<th style="width: 120px;"></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if alumnosActivos %}
+							{% for alumno in alumnosActivos %}
+								<tr>
+									<td style="display: flex;">
+										<img class="orq-tabla-img" src="{{ alumno.foto.url }}" alt="foto de perfil">
+										<p>{{ alumno.nombre }} {{alumno.apellido}}</p>
+									</td>
+									<td>{{ alumno.cedula }}</td>
+									{% if tipo == 'admin' %}
+										<td>{{ alumno.instrumento }}</td>
+									{% else %}
+										<td>{{ alumno.nivel }}</td>
+									{% endif %}
+									<td>{{ alumno.representante }}</td>
+									<td>
+										<button class="orq-btn ver" onclick="redireccionar('{{ alumno.cedula }}');"><i class="fa fa-eye"></i></button>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td style="text-align: center;" colspan="5">No hay alumnos inactivos</td>
+							</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			`;
+		}
+
+		document.getElementById('alumnos').style.transition = "all .3s";
+
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+{% endblock %}

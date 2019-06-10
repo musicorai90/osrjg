@@ -1,0 +1,124 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">PERFIL DEL USUARIO</h1>
+	<div class="orq-box">
+		<div class="row orq-perfil-header">
+			<div class="col-4">
+				<img class="orq-perfil-img" src="{{ alumno.foto.url }}" alt="">
+			</div>
+			<div class="col-8 orq-perfil-text" id="orq-perfil-text">
+				<h2>{{ alumno.nombre }} {{ alumno.apellido }}</h2>
+				<p>alumno</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Cedula:</p>
+				<p class="orq-perfil-content">{{ alumno.cedula }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Teléfono:</p>
+				<p class="orq-perfil-content">{{ alumno.telefono }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-4">
+				<p class="orq-perfil-title">Mail:</p>
+				<p class="orq-perfil-content">{{ alumno.email }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Dirección:</p>
+				<p class="orq-perfil-content">{{ alumno.direccion }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			{% if tipo == 'admin' %}
+				<div class="col-6">
+					<p class="orq-perfil-title">Instrumento:</p>
+					<p class="orq-perfil-content">{{ alumno.instrumento }}</p>
+				</div>
+			{% endif %}
+			<div class="col-6">
+				<p class="orq-perfil-title">Representante:</p>
+				<p class="orq-perfil-content">{{ alumno.representante }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			{% if not alumno.fecha_egr %}
+				<div class="col-6">
+					<p class="orq-perfil-title">Fecha de nacimiento:</p>
+					<p class="orq-perfil-content">{{ alumno.fecha_nac }}</p>
+				</div>
+				<div class="col-6">
+					<p class="orq-perfil-title">Fecha de ingreso:</p>
+					<p class="orq-perfil-content">{{ alumno.fecha_ing }}</p>
+				</div>
+			{% else %}
+				<div class="col-4">
+					<p class="orq-perfil-title">Fecha de nacimiento:</p>
+					<p class="orq-perfil-content">{{ alumno.fecha_nac }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Fecha de ingreso:</p>
+					<p class="orq-perfil-content">{{ alumno.fecha_ing }}</p>
+				</div>
+				<div class="col-4">
+					<p class="orq-perfil-title">Fecha de egreso:</p>
+					<p class="orq-perfil-content">{{ alumno.fecha_egr }}</p>
+				</div>
+			{% endif %}
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col">
+				<p class="orq-perfil-title">Nota:</p>
+				<p class="orq-perfil-content">{{ alumno.nota_aud }}</p>
+			</div>
+			<div class="col">
+				<p class="orq-perfil-title">Nivel:</p>
+				<p class="orq-perfil-content">{{ alumno.nivel }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col">
+				<p class="orq-perfil-title">Sexo:</p>
+				{% if alumno.sexo == 'M' %}
+					<p class="orq-perfil-content">Masculino</p>
+				{% else %}
+					<p class="orq-perfil-content">Femenino</p>
+				{% endif %}
+			</div>
+			<div class="col">
+				<p class="orq-perfil-title">Instrumento asignado:</p>
+				{% if alumno.cod_ins %}
+					<p class="orq-perfil-content">alumno.cod_ins</p>
+				{% else %}
+					<p class="orq-perfil-content">Propio</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% if tipo == 'admin' and not alumno.fecha_egr %}
+		<div class="orq-perfil-btn">
+			<button class="orq-btn ver" style="margin-right: .8rem;" onclick="redireccionar('cambiarRepresentante/');">Cambiar representante</button>
+			<button class="orq-btn enviar" onclick="redireccionar('egresar/');">Egresar</button>
+		</div>
+	{% elif tipo == 'admin' and alumno.fecha_egr %}
+		<div class="orq-perfil-btn">
+			<button class="orq-btn enviar" style="margin-right: .8rem;" onclick="redireccionar('cambiarInstrumento/');">Cambiar instrumento</button>
+			<button class="orq-btn ver" onclick="redireccionar('reingresar/');">Reingresar</button>
+		</div>
+	{% endif %}
+	<div class="orq-perfil-btn">
+		<button class="orq-btn" style="background: #fb8c00;" onclick="window.open('/alumnos/{{ alumno.cedula }}/expediente/', '_blank');">Generar expediente</button>
+		{% if not alumno.instrumento.profesor %}
+			<button class="orq-btn enviar" style="margin-left: .8rem;" onclick="redireccionar('ascender/');">Ascender</button>
+		{% endif %}
+	</div>
+
+{% endblock %}

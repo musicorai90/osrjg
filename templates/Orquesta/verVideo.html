@@ -1,0 +1,60 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	<style>
+		.video {width: 100%; height: 50vh;}
+	</style>
+
+	<h1 class="orq-title">VIDEO DE EVALUACIÓN</h1>
+	<div class="orq-box">
+		<iframe class="video" src="{{ evaluacion.urlvideo }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="margin-bottom: 1.5rem;"></iframe>
+		{% if tipo == 'profesor' and evaluacion.status == 'V' %}
+			<form method="POST" id="orq-form">
+				{% csrf_token %}	
+				<div class="row-2">
+					<label style="font-weight: 500;">Observaciones:</label>
+					<textarea class="form-control" name="observaciones" id="observaciones" placeholder="Observaciones" style="margin: 0 0 1.5rem; min-height: 100px; max-height: 150px;"></textarea>
+				</div>
+				<div class="row">
+					<div class="col">
+						<label style="font-weight: 500;">Nota:</label>
+						<input type="number" id="nota" name="nota" max="20" min="0" class="form-control" style="width: 50%;" placeholder="0-20" onkeypress="valNotaDos(event);" onpaste="event.preventDefault();" ondragover="event.preventDefault();">
+					</div>
+					<input type="text" style="display: none;" id="isTrue" name="isTrue" required>
+				</div>
+				<div class="button-content">
+					<button type="button" class="orq-btn problem" onclick="valEvaluar(false)">Problemas</button>
+					<button type="button" class="orq-btn" onclick="valEvaluar(true)">Evaluar</button>
+				</div>
+			</form>
+		{% endif %}
+	</div>
+
+	<script>
+		function valEvaluar(arg) {
+			var validado = true;
+
+			if (arg) {
+				if (!document.getElementById('nota').value) {
+					validado = false;
+					alert('Por favor, introduzca una nota');
+				} else if (document.getElementById('nota').value > 20) {
+					validado = false;
+					alert('La nota no puede ser mayor a 20');
+				} else {
+					document.getElementById('isTrue').value = "correcto";
+				}
+			} else {
+				document.getElementById('nota').required = false;
+				document.getElementById('isTrue').value = "problem";
+			}
+
+			if (validado) {
+				document.getElementById('orq-form').submit();				
+			}
+		}
+	</script>
+
+{% endblock %}

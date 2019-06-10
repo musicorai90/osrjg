@@ -1,0 +1,84 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if cedExist %}
+		<div class="message" id="message" style="z-index: 1000; background: rgba(200,0,0,.9); top: 3rem;">La cédula ingresada ya existe</div>
+	{% endif %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">REGISTRAR PROFESOR</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Cédula:</label>
+				{{ form.cedula }}
+			</div>
+			<div class="orq-col">
+				<label>Nombre:</label>
+				{{ form.nombre }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Apellido:</label>
+				{{ form.apellido }}
+			</div>
+			<div class="orq-col">
+				<label>Teléfono:</label>
+				{{ form.telefono }}
+			</div>
+		</div>
+		<div class="orq-row-2">
+			<label>Dirección:</label>
+			{{ form.direccion }}
+		</div>
+		<div class="orq-row-2">
+			<label>Correo:</label>
+			{{ form.email }}
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Instrumento:</label>
+				{{ form.instrumento }}
+			</div>
+			<div class="orq-col">
+				<label>Sexo:</label>
+				{{ form.sexo }}
+			</div>
+		</div>
+		<div class="button-content">
+			<button type="submit" style="display: none;" id="guardar-btn">Guardar</button>
+			<button type="button" class="orq-btn" onclick="validarAdminRepPro();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script>
+		document.getElementById('id_instrumento').firstElementChild.textContent = "Seleccione un instrumento";
+		document.getElementById('id_sexo').firstElementChild.textContent = "Seleccione su sexo";
+
+		inputsReEnter();
+
+		var insVal = [];
+
+		{% for ins in insVal %}
+			insVal.push({{ ins }})
+		{% endfor %}
+
+		var instrumento = document.getElementById('id_instrumento').getElementsByTagName('option');
+
+		for (var i = 0; i < instrumento.length; i++) {
+			for (var j = 0; j < insVal.length; j++) {
+				if (instrumento[i].value == insVal[j]) {
+					instrumento[i].style.display = 'none';
+				}
+			}
+		}
+
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}

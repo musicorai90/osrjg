@@ -1,0 +1,21 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">REGISTRAR INSTRUMENTO</h1>
+	<form class="orq-form" method="POST" id="orq-form" style="min-height: auto;">
+		{% csrf_token %}
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Instrumento</label>
+				{{ form.nombre }}
+			</div>
+		</div>
+		<div class="button-content">
+			<button type="submit" class="orq-btn">Guardar</button>
+		</div>
+	</form>
+
+{% endblock %}

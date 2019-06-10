@@ -1,0 +1,82 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title">DETALLES DE LA EVALUACIÓN</h1>
+	<div class="orq-box">
+		{% if tipo == 'profesor' %}
+			<div class="row orq-perfil-header">
+				<div class="col-4">
+					<img class="orq-perfil-img" src="{{ evaluacion.alumno.foto.url }}" alt="">
+				</div>
+				<div class="col-8 orq-perfil-text" id="orq-perfil-text">
+					<h2>{{ evaluacion.alumno.nombre }} {{ evaluacion.alumno.apellido }}</h2>
+				</div>
+			</div>
+		{% endif %}
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Contenido:</p>
+				<p class="orq-perfil-content">{{ evaluacion.contenido }}</p>
+			</div>
+		</div>
+		<div class="row orq-perfil-col">
+			<div class="col-6">
+				<p class="orq-perfil-title">Fecha de inicio:</p>
+				<p class="orq-perfil-content">{{ evaluacion.fecha_ini }}</p>
+			</div>
+			<div class="col-6">
+				<p class="orq-perfil-title">Estatus:</p>
+				<p class="orq-perfil-content status">
+					{% if evaluacion.status == 'E' %}
+						<span class="esperando">ESPERANDO</span>
+					{% elif evaluacion.status == 'V' %}
+						<span class="enviado">ENVIADO</span>
+					{% elif evaluacion.status == 'N' %}
+						<span class="evaluado">EVALUADO</span>
+					{% endif %}
+				</p>
+			</div>
+		</div>
+		{% if evaluacion.status == 'N' %}
+			<div class="row orq-perfil-col">
+				<div class="col-6">
+					<p class="orq-perfil-title">Fecha de fin:</p>
+					<p class="orq-perfil-content">{{ evaluacion.fecha_fin }}</p>
+				</div>
+				<div class="col-6">
+					<p class="orq-perfil-title">Nota:</p>
+					<p class="orq-perfil-content">{{ evaluacion.nota }}</p>
+				</div>
+			</div>
+		{% endif %}
+		<div class="row orq-perfil-col">
+			<div class="col-12">
+				<p class="orq-perfil-title">Observaciones:</p>
+				<p class="orq-perfil-content">{{ evaluacion.observaciones }}</p>
+			</div>
+		</div>
+		{% if tipo == 'alumno' and evaluacion.status == 'E' %}
+			<div class="row orq-perfil-col">
+				<div class="col-6" style="margin-left: 50%;">
+					<p class="orq-perfil-title">Cargar video:</p>
+					<form method="POST">
+						{% csrf_token %}
+						<textarea class="form-control" name="urlvideo" required></textarea>
+						<div class="button-content">
+							<button type="submit" class="orq-btn">Cargar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	{% if evaluacion.status != 'E' %}
+		<div class="button-content">
+			<button type="button" class="orq-btn" onclick="redireccionar('ver');">Ver video</button>
+		</div>
+	{% endif %}
+
+{% endblock %}

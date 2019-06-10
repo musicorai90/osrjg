@@ -1,0 +1,35 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	<h1 class="orq-title" style="margin-bottom: 1.5rem;">NOTAS</h1>
+	<table class="table orq-tabla">
+		<thead>
+			<tr>
+				<th>Contenido</th>
+				<th>Fecha</th>
+				<th>Nota</th>
+				<th style="width: 120px;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if evaluaciones %}
+				{% for evaluacion in evaluaciones %}
+					<tr>
+						<td>{{ evaluacion.contenido }}</td>
+						<td>{{ evaluacion.fecha_fin }}</td>
+						<td>{{ evaluacion.nota }}</td>
+						<td>
+							<button class="orq-btn ver" onclick="redireccionar(/evaluaciones/'{{ evaluacion.id }}/');"><i class="fa fa-eye"></i></button>
+						</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td style="text-align: center;" colspan="5">No hay notas registradas</td>
+				</tr>
+			{% endif %}
+		</tbody>
+	</table>
+{% endblock %}

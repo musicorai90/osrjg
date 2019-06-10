@@ -1,0 +1,35 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">CAMBIAR CONTRASEÑA</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-form-change">
+			<div>
+				<label>Nueva contraseña:</label>
+				<input class="form-control" type="password" name="contrasena" id="contrasena" placeholder="Nueva contraseña" style="margin-bottom: 1rem;" required>
+			</div>
+		</div>
+		<div class="orq-form-change">
+			<div>
+				<label>Repita la contraseña:</label>
+				<input class="form-control" type="password" name="contrasena" id="contrasena2" placeholder="Repita contraseña" required>
+			</div>
+			<div>
+				<span id="contrasena-error">La contraseña no coincide</span>
+			</div>
+		</div>
+		<div class="button-content">
+			<button type="submit" style="display: none;" id="guardar-btn">Guardar</button>
+			<button type="button" class="orq-btn" onclick="changePass();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script type="text/javascript">
+		inputsReEnter();
+	</script>
+
+{% endblock %}

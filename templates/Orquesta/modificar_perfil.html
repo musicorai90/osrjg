@@ -1,0 +1,158 @@
+{% extends 'Base/base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+	{% if cedExist %}
+		<div class="message" id="message" style="z-index: 1000; background: rgba(200,0,0,.9); top: 3rem;">La cédula ingresada ya existe</div>
+	{% endif %}
+	<h1 class="orq-title" style="padding-bottom: 1.5rem;">CAMBIAR ADMIN</h1>
+	<form class="orq-form" method="POST" id="orq-form">
+		{% csrf_token %}
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Cédula:</label>
+				{{ form.cedula }}
+			</div>
+			<div class="orq-col">
+				<label>Nombre:</label>
+				{{ form.nombre }}
+			</div>
+		</div>
+		<div class="orq-row">
+			<div class="orq-col">
+				<label>Apellido:</label>
+				{{ form.apellido }}
+			</div>
+			<div class="orq-col">
+				<label>Teléfono:</label>
+				{{ form.telefono }}
+			</div>
+		</div>
+		<div class="orq-row-2">
+			<label style="font-weight: 500;">Dirección:</label>
+			{{ form.direccion }}
+		</div>
+		<div class="orq-row-2">
+			<label style="font-weight: 500;">Correo:</label>
+			{{ form.email }}
+		</div>
+		{% if tipo == 'profesor' %}
+			<div class="orq-row">
+				<div class="orq-col">
+					<label>Instrumento:</label>
+					{{ form.instrumento }}
+				</div>
+				<div class="orq-col">
+					<label>Sexo:</label>
+					{{ form.sexo }}
+				</div>
+			</div>
+		{% elif tipo == 'alumno' %}
+			<div class="orq-row">
+				<div class="orq-col">
+					<label>Instrumento:</label>
+					{{ form.instrumento }}
+				</div>
+				<div class="orq-col">
+					<label>Representante:</label>
+					{{ form.representante }}
+				</div>
+			</div>
+			<div class="orq-row">
+				<div class="orq-col">
+					<label>Fecha de nacimiento:</label>
+					{{ form.fecha_nac }}
+				</div>
+				<div class="orq-col">
+					<label>Fecha de ingreso:</label>
+					{{ form.fecha_ing }}
+				</div>
+			</div>
+			<div class="orq-row">
+				<div class="orq-col">
+					<label>Nivel:</label>
+					{{ form.nivel }}
+				</div>
+				<div class="orq-col">
+					<label>Sexo:</label>
+					{{ form.sexo }}
+				</div>
+			</div>
+			<div class="orq-row">
+				<div class="orq-col">
+					<label>Nota de audición:</label>
+					{{ form.nota_aud }}
+				</div>
+			</div>
+		{% endif %}
+		<div class="button-content">
+			<button type="submit" style="display: none;" id="guardar-btn">Guardar</button>
+			<button type="button" class="orq-btn" onclick="validarAdminRepPro();" id="guardar">Guardar</button>
+		</div>
+	</form>
+
+	<script type="text/javascript">
+		{% if not cambiar %}
+			document.getElementById('id_cedula').addEventListener('keypress',inputDisabled);
+			document.getElementById('id_cedula').addEventListener('keydown',inputDisabled);
+			document.getElementById('id_cedula').readOnly = true;
+			document.getElementById('id_cedula').classList.add('desactivate');
+		{% endif %}
+
+		{% if tipo == 'profesor' %}
+			readOnlySelect('id_instrumento','{{ usuario.instrumento.id }}');
+			readOnlySelect('id_sexo','{{ usuario.sexo }}');
+		{% elif tipo == 'alumno' %}
+			document.getElementById('id_nota_aud').value = '{{ usuario.nota_aud }}';
+			document.getElementById('id_nota_aud').readOnly = true;
+			document.getElementById('id_nota_aud').classList.add('desactivate');
+
+			meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Noviembre','Diciembre']
+
+			var fecha_nac = '{{ usuario.fecha_nac }}'.split(' ');
+			mes = meses.indexOf(fecha_nac[2]) + 1;
+			if ((mes > 0)&&(mes < 10)) {
+				mes = '0' + mes;
+			}
+
+			var dia = fecha_nac[0];
+			if (dia.length == 1) {
+				dia = '0' + dia;
+			}
+
+			fecha_nac = fecha_nac[4] + '-' + mes + '-' + dia;
+			document.getElementById('id_fecha_nac').value = fecha_nac;
+			document.getElementById('id_fecha_nac').readOnly = true;
+			document.getElementById('id_fecha_nac').classList.add('desactivate');
+
+			var fecha_ing = '{{ usuario.fecha_ing }}'.split(' ');
+			mes = meses.indexOf(fecha_ing[2]) + 1;
+			if ((mes > 0)&&(mes < 10)) {
+				mes = '0' + mes;
+			}
+
+			var dia = fecha_ing[0];
+			if (dia.length == 1) {
+				dia = '0' + dia;
+			}
+
+			fecha_ing = fecha_ing[4] + '-' + mes + '-' + dia;
+			document.getElementById('id_fecha_ing').value = fecha_ing;
+			document.getElementById('id_fecha_ing').readOnly = true;
+			document.getElementById('id_fecha_ing').classList.add('desactivate');
+
+			readOnlySelect('id_instrumento','{{ usuario.instrumento.id }}');
+			readOnlySelect('id_sexo','{{ usuario.sexo }}');
+			readOnlySelect('id_representante','{{ usuario.representante.id }}')
+			readOnlySelect('id_nivel','{{ usuario.nivel }}')
+		{% endif %}
+
+		inputsReEnter();
+
+		setTimeout(function() {
+			document.getElementById('message').classList.add("active");
+		},3000);
+	</script>
+
+{% endblock %}
